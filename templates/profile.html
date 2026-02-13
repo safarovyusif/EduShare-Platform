@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row fade-in">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 mb-4 text-center p-4">
+            <div class="card-body">
+                <div class="position-relative d-inline-block mb-3">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=4e54c8&color=fff&size=128" class="rounded-circle shadow border border-4 border-white">
+                    <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle p-2"></span>
+                </div>
+                <h3 class="fw-bold mt-3">Hörmətli {{ username }}</h3>
+                <p class="text-muted">Tələbə</p>
+                <div class="d-grid gap-2 mt-4">
+                <a href="#" class="btn btn-primary rounded-pill">Profilə Düzəliş Et</a>
+                <a href="/logout" class="btn btn-outline-danger w-100 rounded-pill mt-2">Çıxış</a>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-white border-0 py-3 rounded-top-4 d-flex justify-content-between align-items-center">
+                <h5 class="m-0 fw-bold text-dark"><i class="fas fa-history me-2 text-primary"></i>Yüklədiyim Materiallar</h5>
+                <span class="badge bg-light text-primary">{{ resources|length }} Fayl</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for res in resources %}
+                    <div class="list-group-item p-3 border-0 border-bottom d-flex justify-content-between align-items-center hover-effect">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box bg-light rounded-circle p-2 me-3 text-primary">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">{{ res.title }}</h6>
+                                <small class="text-muted">{{ res.subject }}</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill me-3">Təsdiqlənib</span>
+
+                            <form action="{{ url_for('delete_resource', id=res.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle" title="Sil" onclick="return confirm('Bu faylı silmək istədiyinizə əminsiniz?');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i>
+                        <p>Siz hələ heç nə yükləməmisiniz.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-effect:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

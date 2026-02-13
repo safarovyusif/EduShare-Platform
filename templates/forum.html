@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>💬 Sual-Cavab Forumu</h2>
+    <button class="btn btn-success"><i class="fas fa-plus me-2"></i>Yeni Mövzu Aç</button>
+</div>
+
+<div class="list-group shadow-sm">
+    {% for post in posts %}
+    <a href="#" class="list-group-item list-group-item-action p-4">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1 text-primary fw-bold">{{ post.title }}</h5>
+            <small class="text-muted">3 gün əvvəl</small>
+        </div>
+        <p class="mb-1 text-muted">Müəllif: {{ post.author }}</p>
+        <small><i class="fas fa-comment-dots me-1"></i> {{ post.replies }} Cavab</small>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

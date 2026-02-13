@@ -1,0 +1,8 @@
+{
+  "swagger": "2.0",
+  "info": {"title": "EduShare API", "version": "1.0"},
+  "paths": {
+    "/dashboard": {"get": {"summary": "Resursları gətir"}},
+    "/upload": {"post": {"summary": "Fayl yüklə"}}
+  }
+}
