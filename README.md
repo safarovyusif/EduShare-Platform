@@ -38,8 +38,11 @@ Layihə mütəşəkkil qovluq iyerarxiyası əsasında qurulub:
 ├── static/
 │   └── swagger.json    # API sənədləşməsi (OpenAPI 2.0 standartı)
 ├── templates/          # HTML5 şablonları (Jinja2 mühərriki ilə)
-│   ├── base.html       # Master dizayn, Navbar və Footer
-│   ├── login.html      # Giriş (Authentication) səhifəsi
-│   ├── index.html      # Ana səhifə (Dashboard)
-│   └── profile.html    # Şəxsi kabinet bölməsi
+│   ├── base.html       # Əsas HTML kodları
+|   ├── forum.html      # Forum hissəsi
+|   ├── index.html      # Ana səhifə (Dashboard)
+|   ├── login.html      # Giriş (Authentication) səhifəsi      
+│   ├── mentors.html    # Mentor bölməsi
+│   ├── profile.html    # Şəxsi kabinet bölməsi
+│   └── upload.html     # Fayl yükləmə bölməsi
 └── uploads/            # Serverdə saxlanılan tələbə resursları (PDF/Docx)
