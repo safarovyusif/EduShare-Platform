@@ -6,7 +6,6 @@
 Layihə hal-hazırda PythonAnywhere üzərindən canlı yayımdadır:
 🔗 [edushare.pythonanywhere.com](https://edushare.pythonanywhere.com)
 
-Login yerinə istədiyiniz username-i,şifrə yerinə 12345 yazıb dashboarda daxil ola bilərsiniz.
 
 ---
 
