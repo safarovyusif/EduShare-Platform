@@ -1,60 +1,23 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flasgger import Swagger
 
+from models import db, Resource, Mentor, ForumPost
+
 app = Flask(__name__)
 app.secret_key = 'edushare_gizli_acar'
-
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'uploads')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///edushare.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 
+
+db.init_app(app)
 
 SWAGGER_PATH = os.path.join(BASE_DIR, 'static', 'swagger.json')
 swagger = Swagger(app, template_file=SWAGGER_PATH)
-
-
-class Resource(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    subject = db.Column(db.String(50), nullable=False)
-    author = db.Column(db.String(50), nullable=False)
-    filename = db.Column(db.String(100), nullable=False)
-
-class Mentor(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    subject = db.Column(db.String(50), nullable=False)
-    rating = db.Column(db.Integer, default=5)
-    students = db.Column(db.Integer, default=0)
-
-class ForumPost(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(50), nullable=False)
-    title = db.Column(db.String(200), nullable=False)
-    replies = db.Column(db.Integer, default=0)
-
-
-with app.app_context():
-    db.create_all()
-    
-    if not Mentor.query.first():
-        mentor1 = Mentor(name="Aysel Məmmədova", subject="Riyaziyyat", rating=5, students=12)
-        mentor2 = Mentor(name="Kamran Əliyev", subject="IT/Proqramlaşdırma", rating=4, students=8)
-        mentor3 = Mentor(name="Leyla Quliyeva", subject="Xarici Dil", rating=5, students=15)
-        db.session.add_all([mentor1, mentor2, mentor3])
-        db.session.commit()
-
-    if not ForumPost.query.first():
-        post1 = ForumPost(author="Orxan V.", title="Python-da dövrləri necə optimallaşdırmaq olar?", replies=5)
-        post2 = ForumPost(author="Nigar K.", title="Tarix imtahanı üçün hansı mənbələr yaxşıdır?", replies=2)
-        db.session.add_all([post1, post2])
-        db.session.commit()
 
 
 @app.route('/', methods=['GET', 'POST'])
