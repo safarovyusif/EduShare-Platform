@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-plus-circle"></i> Yeni Mövzu Aç</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ url_for('new_topic') }}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Sualınız və ya Mövzu Başlığı</label>
+                            <input type="text" name="title" class="form-control form-control-lg" placeholder="Məs: Flask-da sessiya necə idarə olunur?" required>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{{ url_for('forum') }}" class="btn btn-outline-secondary">Ləğv Et</a>
+                            <button type="submit" class="btn btn-success px-4">Paylaş</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

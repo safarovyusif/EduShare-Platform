@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h4 class="mb-0">🌟 Mentorluq Müraciəti</h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted text-center mb-4">Bilgilərini paylaşaraq tələbələrə dəstək olmaq istəyirsən? Formu doldur!</p>
+                    <form action="{{ url_for('become_mentor') }}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ad və Soyadınız</label>
+                            <input type="text" name="name" class="form-control" placeholder="Məs: Əli Məmmədov" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">İxtisas Sahəniz</label>
+                            <input type="text" name="subject" class="form-control" placeholder="Məs: UI/UX Dizayn və ya Kimya" required>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Müraciəti Tamamla</button>
+                            <a href="{{ url_for('mentors') }}" class="btn btn-light">Ləğv Et</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
