@@ -1,39 +1,18 @@
-# EduShare - Test və Keyfiyyət Təminatı (QA) Hesabatı
+# EduShare - Test Sənədləşdirməsi (Testing Documentation)
 
-Bu sənəd layihənin 80-90% tamamlanma mərhələsində aparılan texniki testlərin nəticələrini və sistemin stabillik göstəricilərini əks etdirir.
+Bu sənəd EduShare təhsil platformasının funksionallığını, təhlükəsizliyini və davamlılığını yoxlamaq üçün həyata keçirilən avtomatlaşdırılmış və manual test proseslərini əhatə edir.
 
 ## 1. Avtomatlaşdırılmış Testlər (Automated Testing)
 
-Sistemin əsas marşrutları və təhlükəsizlik qaydaları `unittest` kitabxanası vasitəsilə `test_app.py` faylında yoxlanılmışdır.
+Sistemin əsas arxitekturası və mühüm marşrutları (routes) Python-un `pytest` kitabxanası vasitəsilə avtomatlaşdırılmış şəkildə test edilmişdir. Testlər əsas məlumat bazasına zərər verməmək üçün müvəqqəti RAM (memory) bazası üzərində izolyasiya edilmiş mühitdə aparılır.
 
-### Test Nəticələri:
-* **Unit Tests:** Cəmi 3 əsas test ssenarisi icra olundu.
-* **Status:** OK (Bütün testlər uğurla keçdi).
-* **Yoxlanılan marşrutlar:**
-    * Ana səhifənin yüklənməsi (HTTP 200)
-    * Sessiyasız daxili səhifələrə (Dashboard, Upload, Profile) girişin məhdudlaşdırılması (HTTP 302 Redirect)
-    * Mentorlar və Forum səhifələrinin bazadan məlumat çəkmə qabiliyyəti.
+### Testlərin İşə Salınması
 
-## 2. Manual (Əl ilə) Testlər
+Test mühitini qurmaq və testləri icra etmək üçün terminalda aşağıdakı əmrlər daxil edilməlidir:
 
-İstifadəçi axışını (User Flow) yoxlamaq üçün aşağıdakı funksional testlər aparılmışdır:
+```bash
+# PyTest kitabxanasının quraşdırılması
+pip install pytest
 
-| Funksiya | Gözlənilən Nəticə | Vəziyyət |
-| :--- | :--- | :--- |
-| Login sistemi | İstifadəçi adı ilə sessiya yaradılması | Tamamlandı |
-| Resurs Yükləmə | PDF/PPT fayllarının bazaya və serverə yazılması | Tamamlandı |
-| Forum Sistemi | "Yeni Mövzu Aç" funksiyasının bazaya inteqrasiyası | Tamamlandı |
-| Mentorluq Müraciəti | Yeni mentorun qeydiyyatı və siyahıda görünməsi | Tamamlandı |
-| Axtarış və Filtr | Resursların fənnə görə düzgün süzülməsi | Tamamlandı |
-
-## 3. Struktur və UX Təkmilləşdirmələri
-
-Test prosesi zamanı aşkar olunan və aradan qaldırılan çatışmazlıqlar:
-
-* **Naviqasiya xətası:** Forum və Mentorlar səhifəsindəki keçid düymələri aktivləşdirildi.
-* **Məlumat Bazası:** Boş cədvəllər zamanı yaranan vizual boşluqlar "Empty State" mesajları ilə əvəz olundu.
-* **Təhlükəsizlik:** Giriş etməyən istifadəçilərin birbaşa URL yazaraq daxili səhifələrə keçidinin qarşısı alındı.
-
-## 4. Yekun Rəy
-
-Sistem hazırkı mərhələdə stabil işləyir. Kritik funksiyaların (CRUD əməliyyatları) 100%-i uğurla test edilmişdir. Layihə final mərhələyə keçid üçün hazırdır.
+# Testlərin ətraflı (verbose) rejimdə işə salınması
+python -m pytest testapp.py -v
