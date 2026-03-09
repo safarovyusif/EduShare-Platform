@@ -1,47 +1,67 @@
-# 🎓 EduShare - Təhsil və Resurs Paylaşım Platforması
+# 🎓 EduShare - Təhsil və Ünsiyyət Platforması
 
-**EduShare**, tələbələr üçün nəzərdə tutulmuş, tədris materiallarının mərkəzləşdirilmiş şəkildə paylaşılması, axtarılması və idarə edilməsi üçün yaradılmış dinamik veb platformadır.
+EduShare, tələbələrin dərs materiallarını paylaşdığı, təcrübəli mentorlarla əlaqə qurduğu və sual-cavab forumu vasitəsilə bilik mübadiləsi etdiyi vahid, interaktiv veb platformadır.
 
-## 🚀 Canlı Demo
-Layihə hal-hazırda PythonAnywhere üzərindən canlı yayımdadır:
-🔗 [edushare.pythonanywhere.com](https://edushare.pythonanywhere.com)
-
+🚀 **Canlı Demo (Deploy olunmuş versiya):** [edushare.pythonanywhere.com](https://edushare.pythonanywhere.com/)
 
 ---
 
-## ✨ Əsas Funksionallıqlar (MVP Mərhələsi)
+## ✨ Əsas Funksionallıqlar (Features)
 
-### 🔑 İstifadəçi Girişi və Təhlükəsizlik
-* **Sessiya İdarəetməsi:** İstifadəçilər öz adları ilə sistemə daxil olur və sessiya ərzində adları yaddaşda saxlanılır.
-* **Təhlükəsiz Çıxış:** Sessiyanın sonlandırılması və sistemdən Logout funksiyası tam inteqrasiya olunub.
+### 🔐 Rol Əsaslı İdarəetmə və Təhlükəsizlik (RBAC)
+* **3 Fərqli Rol:** Tələbə, Mentor və Admin rollarına uyğun xüsusi icazə sistemi.
+* **Qeydiyyat & Giriş:** Tələbələrin universitet və kurs məlumatları ilə birlikdə sistemdə tam qeydiyyatı.
+* **Fayl Təhlükəsizliyi:** Zərərli faylların qarşısını almaq üçün arxa planda uzantı yoxlanışı (yalnız `.pdf`, `.ppt`, `.doc`) və hər fayl üçün maksimum 10MB ölçü limiti.
 
-### 📊 Dashboard və Resurs İdarəetməsi
-* **Ağıllı Axtarış və Filtr:** Fənlər üzrə (Riyaziyyat, IT, Tarix və s.) və mövzu adına görə sürətli axtarış imkanı.
-* **Fayl Endirmə:** Yüklənmiş materialların (PDF formatında) real vaxtda serverdən endirilməsi.
-* **Dinamik İdarəetmə:** Materialların təsdiqlənmə statusunun izlənilməsi və silinməsi.
+### 📚 Material və Resurs İdarəetməsi
+* **Ağıllı Axtarış & Filtr:** Fənlər üzrə kateqoriyalaşdırma və mövzu adına görə sürətli axtarış imkanı.
+* **Səhifələmə (Pagination):** Sistem performansının düşməməsi üçün yüklənən resursların avtomatik səhifələrə bölünməsi.
+* **Şəxsi Kabinet:** İstifadəçilərin yalnız öz yüklədiyi materialları silə bilməsi və profil (ad, e-poçt, şifrə) yeniləməsi.
 
-### 👤 Şəxsi Kabinet
-* **Dinamik Profil:** Giriş edən istifadəçinin adı və məlumatları kabinet bölməsində avtomatik əks olunur.
-* **Materialların İdarəedilməsi:** İstifadəçinin öz yüklədiyi faylların siyahısı və bazadan silinməsi imkanı.
+### 💬 "Reddit" Tipli Sual-Cavab Forumu
+* **Mövzu və Şərhlər:** Tələbələrin və mentorların suallar verib müzakirələr apara biləcəyi forum arxitekturası.
+* **İnteraktiv Qiymətləndirmə:** Şərhlər üçün *Upvote* (Bəyən) və *Downvote* (Bəyənmə) mexanizmi.
+* **Sürətli Naviqasiya:** Səhifələmə sistemi və mövzular daxilində sözə görə axtarış funksiyası.
+
+### ✉️ Şəxsi Mesajlaşma (DM)
+* **Mesaj Qutusu:** İstifadəçilərin bir-birinə və ya birbaşa mentorlara şəxsi mesaj göndərə bilməsi.
+* **Canlı Bildiriş:** Oxunmamış yeni mesajlar gəldikdə Navbar üzərində qırmızı bildiriş (işığ) xəbərdarlığı.
+
+### 🌟 Mentorluq Sistemi və İdarəetmə Paneli
+* **Mentorluğa Müraciət:** Tələbələrin platformada rəsmi mentor olmaq üçün adminə müraciət formu göndərməsi.
+* **Admin Panel:** Moderatorların mentor müraciətlərini təsdiq/rədd etməsi, şikayətləri oxuyub həll etməsi və zərərli postları tamamilə silmə səlahiyyəti.
 
 ---
 
-## 📂 Layihə Strukturu
+## 🛠 Texnologiya Stack-i (Tech Stack)
 
-Layihə mütəşəkkil qovluq iyerarxiyası əsasında qurulub:
+* **Backend:** Python, Flask Framework
+* **Verilənlər Bazası:** SQLite (Flask-SQLAlchemy ORM)
+* **Frontend:** HTML5, CSS3, Bootstrap 5, Jinja2 Template Engine
+* **API Sənədləşdirməsi:** Flasgger (Swagger UI v2.0)
+* **Test & QA:** PyTest (Avtomatlaşdırılmış Testlər)
+* **Deployment:** PythonAnywhere
+
+---
+
+## 📁 Layihə Strukturu
 
 ```text
-├── app.py              # Backend məntiqi, Flask marşrutları və session idarəetməsi
+├── app.py                # Əsas tətbiq məntiqi və Flask marşrutları (Routes)
+├── models.py             # SQLAlchemy verilənlər bazası modelləri (User, Post, Reply, Message və s.)
+├── seed_db.py            # Baza strukturunun və test datalarının avtomatik yaradılması
+├── test_app.py           # PyTest ilə avtomatlaşdırılmış test ssenariləri
 ├── instance/
-│   └── edushare.db     # SQLite verilənlər bazası (İstifadəçi və resurs dataları)
+│   └── edushare.db       # SQLite verilənlər bazası
 ├── static/
-│   └── swagger.json    # API sənədləşməsi (OpenAPI 2.0 standartı)
-├── templates/          # HTML5 şablonları (Jinja2 mühərriki ilə)
-│   ├── base.html       # Əsas HTML kodları
-|   ├── forum.html      # Forum hissəsi
-|   ├── index.html      # Ana səhifə (Dashboard)
-|   ├── login.html      # Giriş (Authentication) səhifəsi      
-│   ├── mentors.html    # Mentor bölməsi
-│   ├── profile.html    # Şəxsi kabinet bölməsi
-│   └── upload.html     # Fayl yükləmə bölməsi
-└── uploads/            # Serverdə saxlanılan tələbə resursları (PDF/Docx)
+│   └── swagger.json      # OpenAPI/Swagger sənədləşdirmə faylı
+├── templates/            # HTML Şablonları (Jinja2)
+│   ├── base.html         # Əsas struktur və Navbar
+│   ├── index.html        # Ana səhifə və resursların siyahısı
+│   ├── forum.html        # Sual-Cavab forumu
+│   ├── post_detail.html  # Forum mövzusu və şərhlər
+│   ├── messages.html     # Daxil olan və göndərilən mesajlar qutusu
+│   ├── admin_panel.html  # Admin moderasiya paneli
+│   ├── profile.html      # Şəxsi kabinet və tənzimləmələr
+│   └── ... 
+└── uploads/              # Serverdə saxlanılan dərs materialları
