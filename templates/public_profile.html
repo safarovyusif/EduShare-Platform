@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0 rounded-4 text-center p-4">
+            <div class="mb-3">
+                <img src="https://ui-avatars.com/api/?name={{ profile_user.username }}&size=150" class="rounded-circle shadow">
+            </div>
+            <h3 class="fw-bold">{{ profile_user.username }}</h3>
+            
+            <div class="mb-3">
+                {% if profile_user.role == 'Mentor' %}
+                    <span class="badge bg-warning text-dark px-3 py-2 fs-6"><i class="fas fa-star me-1"></i> Rəsmi Mentor</span>
+                {% elif profile_user.role == 'Admin' %}
+                    <span class="badge bg-danger px-3 py-2 fs-6"><i class="fas fa-shield-alt me-1"></i> Admin</span>
+                {% else %}
+                    <span class="badge bg-primary px-3 py-2 fs-6">Tələbə</span>
+                {% endif %}
+            </div>
+
+            <p class="text-muted mb-1"><i class="fas fa-university me-2"></i>{{ profile_user.university }}</p>
+            <p class="text-muted"><i class="fas fa-graduation-cap me-2"></i>{{ profile_user.course }}-ci kurs</p>
+            
+            {% if current_user and current_user.id != profile_user.id %}
+            <hr>
+            <form action="{{ url_for('send_message', receiver_id=profile_user.id) }}" method="POST">
+                <div class="mb-2">
+                    <textarea name="content" class="form-control" rows="2" placeholder="Şəxsi mesaj yaz..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-outline-primary w-100 rounded-pill"><i class="fas fa-paper-plane me-1"></i> Mesaj Göndər</button>
+            </form>
+            {% elif not current_user %}
+                <hr>
+                <a href="/login" class="btn btn-outline-secondary w-100 rounded-pill">Mesaj yazmaq üçün daxil olun</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h5 class="fw-bold mb-3"><i class="fas fa-file-alt text-danger me-2"></i>Paylaşdığı Materiallar</h5>
+        <div class="list-group shadow-sm mb-4">
+            {% for res in resources %}
+            <a href="{{ url_for('download_file', filename=res.filename) }}" class="list-group-item list-group-item-action">
+                <i class="fas fa-file-pdf text-danger me-2"></i> <strong>{{ res.title }}</strong> <small class="text-muted">({{ res.subject }})</small>
+            </a>
+            {% else %}
+            <p class="text-muted bg-white p-3 rounded border">Hələ material paylaşmayıb.</p>
+            {% endfor %}
+        </div>
+
+        <h5 class="fw-bold mb-3"><i class="fas fa-comments text-primary me-2"></i>Forumdakı Fikirləri</h5>
+        <div class="list-group shadow-sm mb-5">
+            {% for reply in replies %}
+            <a href="{{ url_for('post_detail', post_id=reply.post.id) }}" class="list-group-item list-group-item-action">
+                <small class="text-primary fw-bold">{{ reply.post.title }}</small>
+                <p class="mb-1 text-dark">{{ reply.content }}</p>
+            </a>
+            {% else %}
+            <p class="text-muted bg-white p-3 rounded border">Hələ heç bir fikir bildirməyib.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

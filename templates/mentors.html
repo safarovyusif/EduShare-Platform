@@ -6,9 +6,12 @@
         <h2 class="fw-bold text-dark">Ekspert Mentorlar</h2>
         <p class="text-muted mb-0">Sualın var? Təcrübəli tələbələrdən kömək al.</p>
     </div>
+    
+    {% if not current_user or current_user.role != 'Admin' %}
     <a href="{{ url_for('become_mentor') }}" class="btn btn-dark rounded-pill px-4 shadow text-decoration-none">
-    <i class="fas fa-hand-sparkles me-2 text-warning"></i> Mentor Olmaq İstəyirəm
-</a>
+        <i class="fas fa-hand-sparkles me-2 text-warning"></i> Mentor Olmaq İstəyirəm
+    </a>
+    {% endif %}
 </div>
 
 <div class="row g-4">
@@ -19,34 +22,46 @@
             
             <div class="card-body text-center p-4">
                 <div class="mb-3 position-relative d-inline-block">
-                    <img src="https://ui-avatars.com/api/?name={{ mentor.name }}&background=random&size=128" 
+                    <img src="https://ui-avatars.com/api/?name={{ mentor.user.username }}&background=random&size=128" 
                          class="rounded-circle shadow-sm border border-4 border-white" width="90">
                     <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle p-2"></span>
                 </div>
                 
-                <h5 class="fw-bold mb-1">{{ mentor.name }}</h5>
+                <h5 class="fw-bold mb-1">
+                    <a href="{{ url_for('public_profile', username=mentor.user.username) }}" class="text-dark text-decoration-none">{{ mentor.user.username }}</a>
+                </h5>
                 <p class="text-primary small fw-bold mb-3">{{ mentor.subject }}</p>
                 
                 <div class="d-flex justify-content-center mb-4">
                     <div class="bg-light px-3 py-1 rounded-3 mx-1">
-                        <i class="fas fa-star text-warning small"></i> <strong>{{ mentor.rating }}.0</strong>
+                        <i class="fas fa-star text-warning small"></i> <strong>{{ mentor.rating }}</strong>
                     </div>
                     <div class="bg-light px-3 py-1 rounded-3 mx-1">
                         <i class="fas fa-user-friends text-muted small"></i> <strong>{{ mentor.students }}</strong>
                     </div>
                 </div>
 
-                <button class="btn btn-outline-primary w-100 rounded-pill fw-bold">
-                    <i class="far fa-comment-dots me-2"></i>Sual Ver
-                </button>
+                {% if current_user and current_user.role == 'Admin' %}
+                    <a href="{{ url_for('revoke_mentor', mentor_id=mentor.id) }}" class="btn btn-danger w-100 rounded-pill fw-bold" onclick="return confirm('Mentorluğu ləğv etməyə əminsiniz?');">
+                        <i class="fas fa-user-times me-2"></i>Mentorluğu Ləğv Et
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('new_topic', title=mentor.subject + ' üzrə ' + mentor.user.username + ' mentoruna sualım:') }}" class="btn btn-outline-primary w-100 rounded-pill fw-bold">
+                        <i class="far fa-comment-dots me-2"></i>Sual Ver
+                    </a>
+                {% endif %}
             </div>
         </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center text-muted py-5 border rounded bg-white shadow-sm">
+        <i class="fas fa-user-graduate fa-3x mb-3 opacity-25 d-block"></i>
+        <p>Hələ heç bir mentor qeydiyyatdan keçməyib.</p>
     </div>
     {% endfor %}
 </div>
 
 <style>
-    /* Hover effekti */
     .card:hover {
         transform: translateY(-10px);
         box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;

@@ -10,12 +10,13 @@
         <div class="bg-white p-2 rounded-pill shadow-sm d-inline-block w-100" style="max-width: 600px;">
             <form action="/dashboard" method="GET" class="d-flex align-items-center">
                 <div class="px-3 text-muted"><i class="fas fa-search"></i></div>
-                <select name="subject" class="form-select border-0 shadow-none" style="background: transparent;">
-                    <option value="Hamısı">Bütün Fənlər üzrə axtar...</option>
-                    <option value="Riyaziyyat">Riyaziyyat</option>
-                    <option value="IT/Proqramlaşdırma">IT/Proqramlaşdırma</option>
-                    <option value="Tarix">Tarix</option>
-                    <option value="Xarici Dil">Xarici Dil</option>
+                <input type="text" name="search" class="form-control border-0 shadow-none px-2" placeholder="Sözlə axtar..." value="{{ search_query or '' }}" style="max-width: 150px;">
+                <select name="subject" class="form-select border-0 shadow-none border-start ms-2" style="background: transparent;">
+                    <option value="Hamısı" {% if subject_filter == 'Hamısı' %}selected{% endif %}>Bütün Fənlər</option>
+                    <option value="Riyaziyyat" {% if subject_filter == 'Riyaziyyat' %}selected{% endif %}>Riyaziyyat</option>
+                    <option value="IT/Proqramlaşdırma" {% if subject_filter == 'IT/Proqramlaşdırma' %}selected{% endif %}>IT/Proqramlaşdırma</option>
+                    <option value="Tarix" {% if subject_filter == 'Tarix' %}selected{% endif %}>Tarix</option>
+                    <option value="Xarici Dil" {% if subject_filter == 'Xarici Dil' %}selected{% endif %}>Xarici Dil</option>
                 </select>
                 <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 fw-bold">Axtar</button>
             </form>
@@ -24,9 +25,9 @@
     <i class="fas fa-book-reader position-absolute" style="font-size: 15rem; right: -20px; bottom: -40px; opacity: 0.1; transform: rotate(-15deg);"></i>
 </div>
 
-<div class="card border-0 shadow-sm rounded-4">
+<div class="card border-0 shadow-sm rounded-4 mb-4">
     <div class="card-header bg-white border-0 py-3 rounded-top-4">
-        <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-layer-group me-2 text-primary"></i>Son Yüklənən Resurslar</h5>
+        <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-layer-group me-2 text-primary"></i>Tədris Materialları</h5>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -40,23 +41,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for res in resources %}
+                    {% for res in resources.items %}
                         {% set color = 'secondary' %}
-                        {% if res.subject == 'Riyaziyyat' %}
-                            {% set color = 'primary' %}
-                        {% elif res.subject == 'Xarici Dil' %}
-                            {% set color = 'success' %}
-                        {% elif res.subject == 'Tarix' %}
-                            {% set color = 'danger' %}
-                        {% elif 'IT' in res.subject or 'Proqram' in res.subject %}
-                            {% set color = 'info' %}
-                        {% else %}
-                            {% set color = 'warning' %}
-                        {% endif %}
+                        {% if res.subject == 'Riyaziyyat' %}{% set color = 'primary' %}
+                        {% elif res.subject == 'Xarici Dil' %}{% set color = 'success' %}
+                        {% elif res.subject == 'Tarix' %}{% set color = 'danger' %}
+                        {% elif 'IT' in res.subject or 'Proqram' in res.subject %}{% set color = 'info' %}
+                        {% else %}{% set color = 'warning' %}{% endif %}
 
                         <tr class="align-middle border-bottom">
                             <td>
-                                <div class="d-flex align-items-center py-3">
+                                <div class="d-flex align-items-center py-2 ps-3">
                                     <div class="bg-light rounded p-2 me-3 text-primary shadow-sm">
                                         <i class="fas fa-file-alt fa-lg"></i>
                                     </div>
@@ -70,10 +65,8 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-secondary bg-opacity-10 rounded-circle text-center me-2 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                                        <i class="fas fa-user text-secondary"></i>
-                                    </div>
-                                    <span class="text-muted fw-medium">{{ res.author }}</span>
+                                    <i class="fas fa-user-circle text-secondary fa-lg me-2"></i>
+                                    <a href="{{ url_for('public_profile', username=res.author) }}" class="text-muted fw-bold text-decoration-none">{{ res.author }}</a>
                                 </div>
                             </td>
                             <td class="text-end pe-4">
@@ -82,10 +75,39 @@
                                 </a>
                             </td>
                         </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">Axtarışa uyğun material tapılmadı.</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<nav aria-label="Page navigation" class="mt-4">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {% if not resources.has_prev %}disabled{% endif %}">
+      <a class="page-link rounded-start-pill px-3" href="{{ url_for('dashboard', page=resources.prev_num, subject=subject_filter, search=search_query) }}" tabindex="-1">Əvvəlki</a>
+    </li>
+    
+    {% for page_num in resources.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if resources.page == page_num %}
+                <li class="page-item active"><a class="page-link" href="#">{{ page_num }}</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('dashboard', page=page_num, subject=subject_filter, search=search_query) }}">{{ page_num }}</a></li>
+            {% endif %}
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+        {% endif %}
+    {% endfor %}
+
+    <li class="page-item {% if not resources.has_next %}disabled{% endif %}">
+      <a class="page-link rounded-end-pill px-3" href="{{ url_for('dashboard', page=resources.next_num, subject=subject_filter, search=search_query) }}">Sonrakı</a>
+    </li>
+  </ul>
+</nav>
+
 {% endblock %}

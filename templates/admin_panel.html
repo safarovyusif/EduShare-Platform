@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4"><i class="fas fa-user-shield text-danger me-2"></i>Admin Panel</h2>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0 h-100 rounded-4">
+                <div class="card-header bg-dark text-white fw-bold rounded-top-4 py-3"><i class="fas fa-user-plus me-2"></i>Yeni Mentorluq Müraciətləri</div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for app in pending_mentors %}
+                        <li class="list-group-item p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1 fw-bold"><a href="{{ url_for('public_profile', username=app.user.username) }}" class="text-decoration-none">{{ app.user.username }}</a></h6>
+                                    <small class="text-muted">İxtisas: <span class="badge bg-light text-dark border">{{ app.subject }}</span></small>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('approve_mentor', app_id=app.id) }}" class="btn btn-sm btn-success px-3">Təsdiqlə</a>
+                                    <a href="{{ url_for('reject_mentor', app_id=app.id) }}" class="btn btn-sm btn-danger px-3">Rədd et</a>
+                                </div>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="list-group-item p-4 text-center text-muted">Gözləyən mentorluq müraciəti yoxdur.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0 h-100 rounded-4">
+                <div class="card-header bg-primary text-white fw-bold rounded-top-4 py-3"><i class="fas fa-users me-2"></i>Mövcud Mentorlar</div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for mentor in active_mentors %}
+                        <li class="list-group-item p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1 fw-bold"><a href="{{ url_for('public_profile', username=mentor.user.username) }}" class="text-dark text-decoration-none"><i class="fas fa-star text-warning me-1"></i> {{ mentor.user.username }}</a></h6>
+                                    <small class="text-muted">{{ mentor.subject }}</small>
+                                </div>
+                                <a href="{{ url_for('revoke_mentor', mentor_id=mentor.id) }}" class="btn btn-sm btn-outline-danger rounded-pill" onclick="return confirm('Bu şəxsin mentorluğunu ləğv etməyə əminsiniz? O, yenidən tələbə olacaq.');">Ləğv Et</a>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="list-group-item p-4 text-center text-muted">Sistemdə aktiv mentor yoxdur.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5 rounded-4 mt-3">
+        <div class="card-header bg-danger text-white fw-bold rounded-top-4 py-3"><i class="fas fa-exclamation-circle me-2"></i>İstifadəçi Şikayətləri və Dəstək Müraciətləri</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-light text-secondary small">
+                        <tr>
+                            <th class="ps-4">Göndərən</th>
+                            <th>Mövzu</th>
+                            <th>Mesaj</th>
+                            <th>Tarix</th>
+                            <th class="pe-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in reports %}
+                        <tr>
+                            <td class="ps-4"><a href="{{ url_for('public_profile', username=report.sender.username) }}" class="fw-bold text-decoration-none">{{ report.sender.username }}</a></td>
+                            <td class="fw-bold text-dark">{{ report.subject }}</td>
+                            <td style="max-width: 300px; white-space: normal;" class="text-muted small">{{ report.content }}</td>
+                            <td class="small">{{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td class="pe-4">
+                                {% if report.status == 'Baxılmayıb' %}
+                                    <a href="{{ url_for('resolve_report', report_id=report.id) }}" class="btn btn-sm btn-warning rounded-pill px-3 text-dark fw-bold shadow-sm">Baxıldı / Həll Et</a>
+                                {% else %}
+                                    <span class="badge bg-success rounded-pill px-3 py-2"><i class="fas fa-check me-1"></i> Həll edildi</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5" class="text-center p-5 text-muted"><i class="fas fa-check-circle fa-2x mb-2 text-success opacity-50 d-block"></i> Heç bir müraciət/şikayət yoxdur.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

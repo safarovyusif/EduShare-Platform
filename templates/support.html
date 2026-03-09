@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-header bg-warning text-dark text-center py-3 rounded-top-4">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-headset me-2"></i>Adminə Müraciət (Şikayət / Təklif)</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted small text-center mb-4">Platformada qarşılaşdığınız problemi, şikayətinizi və ya təklifinizi birbaşa idarəçilərə (Adminlərə) göndərə bilərsiniz.</p>
+                    
+                    <form action="{{ url_for('support') }}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Mövzu / Başlıq</label>
+                            <input type="text" name="subject" class="form-control" placeholder="Məs: Sistem xətası, Fırıldaqçı istifadəçi və s." required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Mesajınız</label>
+                            <textarea name="content" class="form-control" rows="5" placeholder="Müraciətinizi ətraflı şəkildə bura yazın..." required></textarea>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill"><i class="fas fa-paper-plane me-2"></i>Göndər</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

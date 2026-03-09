@@ -13,19 +13,28 @@
             <h2 class="fw-bold text-primary">EduShare</h2>
             <p class="text-muted">Platformaya Giriş</p>
         </div>
-        
-        <form action="/" method="POST">
+
+        {% if error %}
+        <div class="alert alert-danger text-center shadow-sm rounded-3 px-2 py-3" style="font-size: 0.95rem;">
+            {{ error | safe }}
+        </div>
+        {% endif %}
+
+        <form action="/login" method="POST">
             <div class="mb-3">
                 <label class="form-label">İstifadəçi adı</label>
-                <input type="text" name="username" class="form-control" placeholder="Məsələn: Yusif Səfərov" required>
+                <input type="text" name="username" class="form-control" placeholder="Məsələn: User" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Şifrə</label>
-                <input type="password" name="password" class="form-control" placeholder="******" required>
+                <input type="password" name="password" class="form-control" placeholder="Məsələn: 12345" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill">Daxil Ol</button>
+            <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill mb-3">Daxil Ol</button>
+            
+            <div class="text-center">
+                <a href="/register" class="text-decoration-none small text-muted">Hələ hesabınız yoxdur? <span class="text-primary fw-bold">Qeydiyyatdan keçin</span></a>
+            </div>
         </form>
-        
     </div>
 
 </body>

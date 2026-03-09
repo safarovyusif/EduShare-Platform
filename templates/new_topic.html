@@ -11,7 +11,7 @@
                     <form action="{{ url_for('new_topic') }}" method="POST">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Sualınız və ya Mövzu Başlığı</label>
-                            <input type="text" name="title" class="form-control form-control-lg" placeholder="Məs: Flask-da sessiya necə idarə olunur?" required>
+                            <input type="text" name="title" class="form-control form-control-lg" placeholder="Məs: Flask-da sessiya necə idarə olunur?" value="{{ prefill_title }}" required>
                         </div>
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{{ url_for('forum') }}" class="btn btn-outline-secondary">Ləğv Et</a>

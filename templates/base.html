@@ -45,15 +45,22 @@
             color: var(--primary-color) !important;
             transform: translateY(-2px);
         }
-        .btn-upload {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white !important;
+        
+        /* YÜKLƏ DÜYMƏSİ ÜÇÜN XÜSUSİ DÜZƏLİŞ */
+        .navbar-nav .nav-link.btn-upload, 
+        a.btn-upload {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) !important;
+            color: #ffffff !important; /* Həmişə ağ olacaq */
             border-radius: 30px;
             box-shadow: 0 4px 15px rgba(78, 84, 200, 0.3);
+            border: none !important;
+            opacity: 1 !important;
         }
-        .btn-upload:hover {
+        .navbar-nav .nav-link.btn-upload:hover,
+        a.btn-upload:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(78, 84, 200, 0.4);
+            box-shadow: 0 6px 20px rgba(78, 84, 200, 0.5);
+            color: #ffffff !important;
         }
 
         /* Məzmun Sahəsi */
@@ -79,11 +86,17 @@
         }
         footer a { color: #bdc3c7; text-decoration: none; }
         footer a:hover { color: white; }
+
+        /* Mesaj qutusunun ağ rəng problemi üçün xüsusi əlavə */
+        .nav-pills .nav-link.active {
+            color: #ffffff !important;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg sticky-top">
+   <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/dashboard">
                 <i class="fas fa-graduation-cap me-2"></i>EduShare
@@ -96,16 +109,55 @@
                     <li class="nav-item"><a class="nav-link" href="/dashboard">Resurslar</a></li>
                     <li class="nav-item"><a class="nav-link" href="/mentors">Mentorlar</a></li>
                     <li class="nav-item"><a class="nav-link" href="/forum">Forum</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/profile">Kabinet</a></li>
-                    <li class="nav-item ms-2">
-                        <a class="nav-link btn-upload px-4 py-2" href="/upload">
-                            <i class="fas fa-plus me-1"></i> Yüklə
-                        </a>
-                    </li>
+
+                    {% if current_user %}
+                        {% if current_user.role == 'Admin' %}
+                            <li class="nav-item"><a class="nav-link text-danger fw-bold" href="/admin"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link text-warning fw-bold" href="/support"><i class="fas fa-headset"></i> Dəstək</a></li>
+                        {% endif %}
+                        
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" href="/messages">
+                                <i class="far fa-envelope text-primary"></i> Mesajlar
+                                {% if unread_count > 0 %}
+                                <span class="position-absolute top-25 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                    <span class="visually-hidden">Yeni mesaj</span>
+                                </span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Kabinet</a></li>
+                        <li class="nav-item ms-2">
+                            <a class="nav-link btn-upload px-4 py-2" href="/upload">
+                                <i class="fas fa-plus me-1"></i> Yüklə
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ms-2">
+                            <a class="nav-link btn btn-outline-primary px-3 py-1 rounded-pill" style="color: var(--primary-color) !important; border-color: var(--primary-color);" href="/login">Daxil Ol</a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a class="nav-link btn-upload px-4 py-2" href="/register">Qeydiyyat</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="container mt-3 position-absolute top-0 start-50 translate-middle-x" style="z-index: 1050;">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show shadow" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
 
     <div class="container main-content mt-4 fade-in">
         {% block content %}{% endblock %}
