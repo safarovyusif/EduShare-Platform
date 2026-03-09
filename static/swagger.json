@@ -1,34 +1,109 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "EduShare API",
-    "version": "1.0",
-    "description": "EduShare təhsil platformasının əsas əməliyyatları"
+    "title": "EduShare API - Təhsil Platforması",
+    "version": "2.0",
+    "description": "Tələbələr və mentorlar üçün resurs mübadiləsi, sual-cavab forumu və şəxsi mesajlaşma platformasının əsas API sənədləşdirməsi."
   },
+  "tags": [
+    { "name": "Auth", "description": "İstifadəçi girişi və qeydiyyatı" },
+    { "name": "Resources", "description": "Tədris materiallarının idarə edilməsi" },
+    { "name": "Forum", "description": "Sual-Cavab mövzuları və şərhlər" },
+    { "name": "Mentorship", "description": "Mentorlar və onlara müraciət" },
+    { "name": "Messages & Support", "description": "Şəxsi mesajlaşma və Adminə müraciət" }
+  ],
   "paths": {
+    "/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Sistemdə yeni istifadəçi yaradır (Tələbə)"
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "İstifadəçi adı və şifrə ilə sistemə daxil olur"
+      }
+    },
     "/dashboard": {
       "get": {
-        "summary": "Bütün resursların siyahısını gətirir"
+        "tags": ["Resources"],
+        "summary": "Bütün resursların səhifələnmiş siyahısını gətirir",
+        "parameters": [
+          { "name": "search", "in": "query", "type": "string", "description": "Sözlə axtarış" },
+          { "name": "subject", "in": "query", "type": "string", "description": "Fənnə görə filterləmə" },
+          { "name": "page", "in": "query", "type": "integer", "description": "Səhifə nömrəsi" }
+        ]
       }
     },
     "/upload": {
       "post": {
-        "summary": "Sistemə yeni fayl yükləyir"
-      }
-    },
-    "/profile": {
-      "get": {
-        "summary": "Şəxsi kabineti və istifadəçinin öz fayllarını gətirir"
-      }
-    },
-    "/mentors": {
-      "get": {
-        "summary": "Ekspert mentorların siyahısını gətirir"
+        "tags": ["Resources"],
+        "summary": "Sistemə yeni dərs materialı (PDF, DOC, PPT) yükləyir (Maks. 10MB)"
       }
     },
     "/forum": {
       "get": {
-        "summary": "Sual-cavab forumundakı mövzuları gətirir"
+        "tags": ["Forum"],
+        "summary": "Forumdakı sual-cavab mövzularını gətirir",
+        "parameters": [
+          { "name": "q", "in": "query", "type": "string", "description": "Mövzularda axtarış" },
+          { "name": "page", "in": "query", "type": "integer", "description": "Səhifə nömrəsi" }
+        ]
+      }
+    },
+    "/forum/new": {
+      "post": {
+        "tags": ["Forum"],
+        "summary": "Forumda yeni sual (mövzu) açır"
+      }
+    },
+    "/forum/post/{post_id}/reply": {
+      "post": {
+        "tags": ["Forum"],
+        "summary": "Mövcud suala cavab (şərh) yazır",
+        "parameters": [
+          { "name": "post_id", "in": "path", "required": true, "type": "integer" }
+        ]
+      }
+    },
+    "/mentors": {
+      "get": {
+        "tags": ["Mentorship"],
+        "summary": "Təsdiqlənmiş ekspert mentorların siyahısını gətirir"
+      }
+    },
+    "/mentors/apply": {
+      "post": {
+        "tags": ["Mentorship"],
+        "summary": "Tələbənin mentor olmaq üçün Adminə müraciət göndərməsi"
+      }
+    },
+    "/messages": {
+      "get": {
+        "tags": ["Messages & Support"],
+        "summary": "İstifadəçinin daxil olan və göndərdiyi şəxsi mesajlarını gətirir"
+      }
+    },
+    "/send_message/{receiver_id}": {
+      "post": {
+        "tags": ["Messages & Support"],
+        "summary": "Seçilmiş istifadəçiyə (ID əsasında) şəxsi mesaj göndərir",
+        "parameters": [
+          { "name": "receiver_id", "in": "path", "required": true, "type": "integer" }
+        ]
+      }
+    },
+    "/support": {
+      "post": {
+        "tags": ["Messages & Support"],
+        "summary": "Adminə şikayət, problem və ya təklif göndərir"
+      }
+    },
+    "/admin": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Yalnız Adminlər üçün idarəetmə paneli (Moderasiya)"
       }
     }
   }
